@@ -2,3 +2,4 @@ dhclient
 apache2ctl start
 ip link set eth0 up
 ifconfig eth0 10.126.192.1/19
+route add default gw 10.126.223.254 dev eth0
