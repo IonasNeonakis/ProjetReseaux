@@ -1,1 +1,3 @@
 dhclient
+ip link set eth0 up
+ifconfig eth0 10.126.160.1/19
