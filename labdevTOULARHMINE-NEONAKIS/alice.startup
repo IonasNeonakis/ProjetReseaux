@@ -1,4 +1,1 @@
 dhclient
-ip link set eth0 up
-ifconfig eth0 10.126.128.1/19
-route add default gw 10.126.159.254 dev eth0

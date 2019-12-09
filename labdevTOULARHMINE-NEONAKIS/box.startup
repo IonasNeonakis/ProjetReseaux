@@ -1,5 +1,5 @@
 ip link set eth0 up
-ifconfig eth1 1.2.3.254/24
+ifconfig eth0 1.2.3.254/24
 ip link set eth1 up
 ifconfig eth1 10.126.159.254/19
 ip link set eth2 up
