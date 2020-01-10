@@ -1,3 +1,19 @@
+#initialiser les chaines
+iptables -t filter -F FORWARD
+iptables -t filter -F INPUT
+iptables -t filter -F OUTPUT
+iptables -t nat -F PREROUTING
+iptables -t nat -F POSTROUTING
+
+#comportement par defaut : drop
+iptables -t filter -P FORWARD DROP
+iptables -t filter -P INPUT DROP
+iptables -t filter -P OUTPUT DROP
+
+#connexions locales
+iptables -t filter -A INPUT -i lo -j ACCEPT
+iptables -t filter -A OUTPUT -o lo -j ACCEPT
+
 ip link set eth0 up
 ifconfig eth0 1.2.3.130/24
 ip link set eth1 up
@@ -7,11 +23,16 @@ ifconfig eth2 10.126.191.254/19
 ip link set eth3 up
 ifconfig eth3 10.126.223.254/19
 
-echo 1 > /proc/sys/net/ipv4/ip_forward
-
 route add default gw 1.2.3.4 eth0
 
 /etc/init.d/dhcp3-server start
+/etc/init.d/ssh start
+
 iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source 1.2.3.130
 iptables -t nat -A PREROUTING -i eth0 -j DNAT --to 10.126.192.1
 
+iptables -t filter -A FORWARD -i eth0 -j ACCEPT
+iptables -t filter -A FORWARD -o eth0 -j ACCEPT
+
+iptables -t filter -A INPUT -i eth1 -p tcp --dport 22 -j ACCEPT
+iptables -t filter -A OUTPUT -o eth1 -p tcp --sport 22 -j ACCEPT
