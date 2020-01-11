@@ -34,5 +34,22 @@ iptables -t nat -A PREROUTING -i eth0 -j DNAT --to 10.126.192.1
 iptables -t filter -A FORWARD -i eth0 -j ACCEPT
 iptables -t filter -A FORWARD -o eth0 -j ACCEPT
 
+# Connexion au ssh depuis lanA uniquement
 iptables -t filter -A INPUT -i eth1 -p tcp --dport 22 -j ACCEPT
 iptables -t filter -A OUTPUT -o eth1 -p tcp --sport 22 -j ACCEPT
+
+# ajouter des règles de NAT sur (box) pour autoriser des connexions depuis lana et lanb vers "www.ara.com".
+#Pour le lanA
+iptables -A FORWARD -i eth1 -o eth3 -j ACCEPT #du lanA vers le lanC
+iptables -A FORWARD -i eth3 -o eth1 -j ACCEPT #Du lanC vers le lanA
+
+#Pour le lanB
+iptables -A FORWARD -i eth2 -o eth3 -j ACCEPT #du lanB vers le lanC
+iptables -A FORWARD -i eth3 -o eth2 -j ACCEPT #Du lanC vers le lanB
+
+#Autorise la connexion vers www.ara.com
+iptables -t nat -A PREROUTING -d 1.2.3.130 -p tcp --dport 80 -j DNAT --to-destination 10.126.192.1
+
+
+
+
