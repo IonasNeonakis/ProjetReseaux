@@ -50,6 +50,8 @@ iptables -A FORWARD -i eth3 -o eth2 -j ACCEPT #Du lanC vers le lanB
 #Autorise la connexion vers www.ara.com
 iptables -t nat -A PREROUTING -d 1.2.3.130 -p tcp --dport 80 -j DNAT --to-destination 10.126.192.1
 
+iptables -t nat -A PREROUTING -s 10.126.160.0/19 -d 9.9.9.9 -j DROP
+
 
 
 
